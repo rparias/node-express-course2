@@ -1,11 +1,19 @@
-const http = require('http')
+const express = require('express')
+const app = express()
+const { products } = require('./data')
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, {
-    'Content-Type': 'text/html'
-  })
-  res.write('<h1>Hello World</h1>')
-  res.end()
+app.get('/', (req, res) => {
+  res.send('<h1>Hello World</h1><a href="/api/products">products</a>')
 })
 
-server.listen(5000)
+app.get('/api/products', (req, res) => {
+  const newProducts = products.map(product => {
+    const {id, name, image} = product
+    return {id, name, image}
+  })
+  res.json(newProducts)
+})
+
+app.listen(5000, () => {
+  console.log('Server is listening on port 5000');
+})
