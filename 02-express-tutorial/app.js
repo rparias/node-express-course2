@@ -2,26 +2,27 @@ const express = require('express')
 const app = express()
 
 // req => middleware => res
+const logger = require('./logger')
 
-// this is my middleware function
-// the req, res and next will be passed here automatically by express
-const logger = (req, res, next) => {
-  const method = req.method
-  const url = req.url
-  const time = new Date().getFullYear()
-  console.log(method, url, time)
+// Call the middleware for every endpoint instead of calling in the method as a second parameter
+// The app.use should be called before the endpoints, otherwise the middleware will be called only for the endpoints below it
+app.use(logger)
+// app.use('/api', logger) this middleware will be executed only when the url has /api
 
-  // next will continue with the flow where the middleware was called
-  next()
-}
-
-// the middleware function should be passed in the second parameter
-app.get('/', logger, (req, res) => {
+app.get('/', (req, res) => {
   res.send('Home')
 })
 
-app.get('/about', logger, (req, res) => {
+app.get('/about', (req, res) => {
   res.send('About')
+})
+
+app.get('/api/products', (req, res) => {
+  res.send('Products')
+})
+
+app.get('/api/items', (req, res) => {
+  res.send('Items')
 })
 
 
