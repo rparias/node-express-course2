@@ -3,11 +3,12 @@ const app = express()
 
 // req => middleware => res
 const logger = require('./logger')
+const authorize = require('./authorize')
 
 // Call the middleware for every endpoint instead of calling in the method as a second parameter
 // The app.use should be called before the endpoints, otherwise the middleware will be called only for the endpoints below it
-app.use(logger)
 // app.use('/api', logger) this middleware will be executed only when the url has /api
+app.use([logger, authorize])
 
 app.get('/', (req, res) => {
   res.send('Home')
@@ -22,6 +23,7 @@ app.get('/api/products', (req, res) => {
 })
 
 app.get('/api/items', (req, res) => {
+  console.log(req.user)
   res.send('Items')
 })
 
