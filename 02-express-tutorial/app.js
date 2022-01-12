@@ -20,7 +20,8 @@ app.post('/api/people', (req, res) => {
   if(!name) {
     return res.status(400).json({success: false, msg: 'please provide name value'})
   }
-  res.status(201).json({success: true, person: name})
+  people.push({id: people.length + 1, name})
+  res.status(201).json({success: true, data: [...people]})
 })
 
 app.post('/login', (req, res) => {
